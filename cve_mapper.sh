@@ -1,32 +1,32 @@
 #!/bin/bash
 
-# --- VARIABLES DE CONFIGURATION ---
+# --- CONFIGURATION VARIABLES ---
 TARGET="infrastructure.txt"
 SKILL="vuln-scanner"
 PROVIDER="openrouter"
-MODEL="moonshotai/kimi-k2.6" # Ou claude-3.5-sonnet si disponible
+MODEL="moonshotai/kimi-k2.6" # Or claude-3.5-sonnet if available
 HOST_OUTPUT_DIR="$PWD/generated_reports"
 mkdir -p "$HOST_OUTPUT_DIR"
 
-# NOUVEAU : On définit le chemin exact tel qu'il sera vu par l'agent dans Docker
+# NEW: We define the exact path as seen by the agent inside Docker
 TARGET_IN_DOCKER="/workspace/$TARGET"
 
-# Le prompt utilise maintenant le chemin absolu du fichier monté
-PROMPT="Analyse l'architecture décrite dans le fichier absolu $TARGET_IN_DOCKER et génère le rapport final. Sauvegarde IMPÉRATIVEMENT tous tes fichiers dans le dossier absolu /output/. Ne sauvegarde absolument rien ailleurs."
+# The prompt now uses the absolute path of the mounted file
+PROMPT="Analyze the architecture described in the absolute file $TARGET_IN_DOCKER and generate the final report. You MUST save ALL your files in the absolute directory /output/. Do not save anything anywhere else."
 # ----------------------------------
 
 if [ ! -f "$TARGET" ]; then
-    echo "❌ Erreur : Le fichier $TARGET n'existe pas dans le dossier courant ($PWD)."
+    echo "Error: The file $TARGET does not exist in the current directory ($PWD)."
     exit 1
 fi
 
-echo "⚙️ Configuration de l'environnement..."
-# Exécution du bac à sable pour l'écriture de fichiers
+echo "Configuring environment..."
+# Sandbox execution for file writes
 hermes config set terminal.backend docker
 hermes config set terminal.docker_mount_cwd_to_workspace true
 hermes config set terminal.docker_volumes "[\"$HOST_OUTPUT_DIR:/output\"]"
 hermes config set terminal.docker_run_as_host_user true
 
-echo "🔍 Lancement de l'analyse via les outils MCP..."
-# Lancement de l'agent
+echo "Launching analysis via native MCP tools..."
+# Agent launch
 hermes chat --skills "$SKILL" --provider "$PROVIDER" -m "$MODEL" -q "$PROMPT" --yolo --accept-hooks

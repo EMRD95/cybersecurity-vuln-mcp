@@ -1,0 +1,5 @@
+# Repository CODEOWNERS
+# Assign automatic reviewers for quality gating
+
+* @EMRD95
+# .github/workflows/* @EMRD95

@@ -1,0 +1,72 @@
+MediConnect Corp est une société de santé numérique qui opère une plateforme SaaS de gestion de
+dossiers médicaux.
+Couche exposition :
+• Serveur web Nginx 1.18 exposé sur Internet (ports 80/443), TLS 1.2 uniquement
+• Application web PHP 7.4 (Laravel 8.x) hébergée sur Ubuntu 20.04
+• API REST publique sur /api/v1 — authentification par token JWT (HS256)
+• Interface d'administration sur /admin — authentification basique HTTP
+Couche applicative :
+• Serveur d'intégration Mirth Connect 4.4.0 (port 8080 interne, exposé via proxy)
+• Service de notification interne en Python 3.8 utilisant pickle pour la sérialisation
+• Moteur de règles métier en Java 11 (Spring Boot 2.5)
+• Service de génération de PDF basé sur wkhtmltopdf 0.12.5
+Couche données :
+• Base de données MySQL 5.7 accessible depuis l'application (user: app_user, pwd: App2023!)
+• Serveur Redis 6.0 sans authentification, accessible en interne sur le port 6379
+• Stockage fichiers AWS S3 — bucket public en lecture, credentials stockés dans .env
+Couche infrastructure :
+• Serveur SSH exposé sur le port 22 — authentification par mot de passe autorisée
+• Pas de segmentation réseau entre les couches (flat network)
+• Logs applicatifs non centralisés, pas de SIEM
+• Pas de WAF ni d'IDS/IPS déployé
+• Mises à jour système non automatisées — dernier patch : 8 mois
+
+Composants prioritaires à traiter (en plus des autres elements présents dans la description textuelle) : 
+
+Mirth Connect (Version : 4.4.0)
+
+    Mots-clés de recherche suggérés : mirth connect RCE
+
+    Vulnérabilités (CVE) à trouver : CVE-2023-43208
+
+PHP / Laravel (Version : 7.4 / 8.x)
+
+    Mots-clés de recherche suggérés : PHP 7.4 vulnerability, Laravel 8 deserialization
+
+    Vulnérabilités (CVE) à trouver : CVE-2021-21236, CVE-2022-31279
+
+MySQL (Version : 5.7)
+
+    Mots-clés de recherche suggérés : MySQL 5.7 privilege escalation
+
+    Vulnérabilités (CVE) à trouver : CVE-2021-2154, CVE-2021-2180
+
+wkhtmltopdf (Version : 0.12.5)
+
+    Mots-clés de recherche suggérés : wkhtmltopdf SSRF
+
+    Vulnérabilités (CVE) à trouver : CVE-2022-35583
+
+Redis (Version : 6.0 no auth)
+
+    Mots-clés de recherche suggérés : Redis unauthenticated RCE
+
+    Vulnérabilités (CVE) à trouver : CVE-2022-0543
+
+Nginx (Version : 1.18)
+
+    Mots-clés de recherche suggérés : nginx 1.18 vulnerability
+
+    Vulnérabilités (CVE) à trouver : CVE-2021-23017
+
+JWT HS256 (Version : Non spécifiée)
+
+    Mots-clés de recherche suggérés : JWT algorithm confusion
+
+    Vulnérabilités (CVE) à trouver : CWE-347 (pas de CVE directe)
+
+SSH password auth (Version : Non spécifiée)
+
+    Mots-clés de recherche suggérés : SSH brute force weak password
+
+    Vulnérabilités (CVE) à trouver : CWE-521

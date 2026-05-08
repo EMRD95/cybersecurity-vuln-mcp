@@ -1,0 +1,30 @@
+{
+  "name": "cybersecurity-vuln-mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "MCP server for cybersecurity vulnerability intelligence - NVD, CISA KEV, EPSS, ATT&CK, MITRE CWE",
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "apify": "^3.5.2",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@apify/tsconfig": "^0.1.1",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.32",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "start": "node dist/main.js",
+    "start:dev": "npx tsx src/main.ts",
+    "stdio": "node dist/stdio.js",
+    "stdio:dev": "npx tsx src/stdio.ts",
+    "build": "tsc",
+    "test": "echo \"No tests\" && exit 0"
+  }
+}

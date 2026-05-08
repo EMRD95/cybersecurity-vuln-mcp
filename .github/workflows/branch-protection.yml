@@ -1,0 +1,18 @@
+name: Enforce Branch Protection
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [main, development]
+
+jobs:
+  block-direct-push:
+    name: Block direct pushes to protected branches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail on direct push to protected branch
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development')
+        run: |
+          echo "::error::Direct pushes to '${{ github.ref_name }}' are not allowed. Please open a Pull Request."
+          exit 1

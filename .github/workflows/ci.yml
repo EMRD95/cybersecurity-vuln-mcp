@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+jobs:
+  lint-typecheck-build:
+    name: 🔧 TypeScript Build & Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./vuln-scanner-mcp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vuln-scanner-mcp/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Type Check (no emit)
+        run: npx tsc --noEmit
+
+  shellcheck:
+    name: 📜 Shell Script Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate cve_mapper.sh syntax
+        run: bash -n cve_mapper.sh
+      - name: Detail Dockerfile
+        run: cat vuln-scanner-mcp/Dockerfile
+
+  docker-smoke:
+    name: 🚀 Docker Smoke Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./vuln-scanner-mcp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./vuln-scanner-mcp
+          push: false
+          tags: |
+            ghcr.io/emrd95/cybersecurity-vuln-mcp:ci
+            cybersecurity-vuln-mcp:latest

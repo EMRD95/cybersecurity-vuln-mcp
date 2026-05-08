@@ -1,0 +1,13 @@
+services:
+  vuln-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cybersecurity-vuln-mcp:latest
+    container_name: vuln-mcp
+    # Required for stdio MCP transport — keeps stdin open
+    stdin_open: true
+    tty: true
+    # Optional: mount cached data if you later add persistent caching
+    # volumes:
+    #   - ./cache:/app/cache

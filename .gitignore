@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Enterprise .gitignore — Cybersecurity Vuln MCP
+# .gitignore — Cybersecurity Vuln MCP
 # ---------------------------------------------------------------------------
 
 # ---- OS / IDE ----
@@ -58,7 +58,6 @@ ENV/
 *.img
 
 # ---- Outputs & Artifacts ----
-generated_reports/
 rapports_generes/
 coverage/
 *.log

@@ -4,7 +4,7 @@
 [![Docker Publish](https://github.com/EMRD95/cybersecurity-vuln-mcp/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/EMRD95/cybersecurity-vuln-mcp/actions/workflows/docker-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An enterprise-grade **Model Context Protocol (MCP)** server and Hermes skillset that detects, enriches, and reports cybersecurity vulnerabilities from natural language infrastructure descriptions. It aggregates data from NVD, CISA KEV, EPSS, MITRE ATT\&CK, and MITRE CWE into a unified intelligence pipeline.
+A **Model Context Protocol (MCP)** server and Hermes skillset that detects, enriches, and reports cybersecurity vulnerabilities from natural language infrastructure descriptions. It aggregates data from NVD, CISA KEV, EPSS, MITRE ATT\&CK, and MITRE CWE into a unified intelligence pipeline.
 
 ![System Workflow](docs/images/workflow_diagram.png)
 
@@ -113,6 +113,15 @@ The `cve_mapper.sh` script orchestrates the full workflow: it reads `infrastruct
 
 Reports are saved to `./generated_reports/`.
 
+### Sample Outputs
+
+The repository includes example reports generated from the sample `infrastructure.txt` target, so you can see the produced format immediately:
+
+- `generated_reports/vulnerability_report.json` — Structured vulnerability data (CVEs, CVSS, EPSS, CWEs, mitigations, attack scenarios, DREAD scores)
+- `generated_reports/vulnerability_report.html` — Professional styled HTML report with CSS, highlighting Top 3 priorities, EPSS scores, and actionable mitigations with copy-paste code blocks
+
+These files are versioned as reference outputs. When you run the tool against your own infrastructure, new reports will be written to the same directory.
+
 ### Hermes Docker backend configuration (used by the script)
 
 The orchestration script temporarily switches Hermes into Docker backend mode to sandbox file writes:
@@ -144,6 +153,9 @@ hermes config set terminal.docker_run_as_host_user false
 │   └── ISSUE_TEMPLATE/
 ├── cve_mapper.sh            # Orchestration script (Hermes + Docker)
 ├── infrastructure.txt       # Sample target architecture description
+├── generated_reports/        # Example JSON & HTML outputs from sample run
+│   ├── vulnerability_report.json
+│   └── vulnerability_report.html
 ├── vuln-scanner/            # Hermes skill
 │   └── SKILL.md
 ├── vuln-scanner-mcp/        # MCP server source & Docker assets
@@ -169,7 +181,7 @@ hermes config set terminal.docker_run_as_host_user false
 
 ## CI/CD & Branch Strategy
 
-This repository enforces an enterprise **GitFlow** model:
+This repository enforces a **GitFlow** model with protected branches:
 
 | Branch      | Purpose                                                            | Direct Push |
 |-------------|---------------------------------------------------------------------|-------------|
@@ -190,6 +202,10 @@ This repository enforces an enterprise **GitFlow** model:
    - Shell script syntax validation
 5. After approval, squash-merge into `development`.
 6. Release merges from `development` to `main` trigger automated GHCR image publication.
+
+## Acknowledgments
+
+The `vuln-scanner-mcp` MCP server is based on and extends the work by **[martc03/gov-mcp-servers](https://github.com/martc03/gov-mcp-servers)**. The original foundation for integrating government vulnerability data sources (NVD, CISA KEV, EPSS) via MCP has been adapted and extended here with additional MITRE CWE taxonomy tools, attack-chain mapping, bulk CVE lookups, and Hermes skill integration.
 
 ## Security
 

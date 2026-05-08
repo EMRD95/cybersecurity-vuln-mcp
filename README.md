@@ -147,8 +147,7 @@ hermes config set terminal.docker_run_as_host_user false
 ├── .github/                 # CI/CD workflows (GitHub Actions)
 │   ├── workflows/
 │   │   ├── ci.yml              # Lint, build, type-check, Docker smoke test
-│   │   ├── docker-publish.yml # GHCR image publication on main/releases
-│   │   └── branch-protection.yml # Direct-push guard
+│   │   └── docker-publish.yml  # GHCR image publication on main/releases
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── ISSUE_TEMPLATE/
 ├── cve_mapper.sh            # Orchestration script (Hermes + Docker)
